@@ -7,19 +7,19 @@ config.read('dwh.cfg')
 
 # DROP TABLES
 
-staging_events_table_drop = "drop table if exists staging_events"
-staging_songs_table_drop = "drop table if exists staging_songs"
-songplay_table_drop = "drop table if exists songplay"
-user_table_drop = "drop table if exists user"
-song_table_drop = "drop table if exists song"
-artist_table_drop = "drop table if exists artist"
-time_table_drop = "drop table if exists time"
+staging_events_table_drop = "drop table if exists staging_events;"
+staging_songs_table_drop = "drop table if exists staging_songs;"
+songplay_table_drop = "drop table if exists songplay;"
+user_table_drop = "drop table if exists users;"
+song_table_drop = "drop table if exists songs;"
+artist_table_drop = "drop table if exists artists;"
+time_table_drop = "drop table if exists time;"
 
 # CREATE TABLES
 
 staging_events_table_create= ("""
-    create table staging_events
-    artist name varchar(50),
+    create table staging_events (
+    artist_name varchar(50),
     firstName varchar(50),
     lastName varchar(50),
     gender varchar(1),
@@ -35,71 +35,71 @@ staging_events_table_create= ("""
     status smallint,
     ts timestamp,
     userAgent varchar(200),
-    userId int,
+    userId int);
 """)
 
 staging_songs_table_create = ("""
-    create table staging_songs
+    create table staging_songs (
     artist_id char(18),
     artist_latitude numeric(7,4),
     artist_longitude numeric(7,4),
     artist_location varchar(100),
-    artist_name varchar(50),,
+    artist_name varchar(50),
     song_id char(18),
     title varchar(50),
     duration numeric,
-    year smallint;
+    year smallint);
 """)
 
 songplay_table_create = ("""
-    create table songplay
+    create table songplay (
     songplay_id int identity(0,1) primary key, 
-    start_time bigint foreign key references time sortkey,
-    user_id int foreign key references users sortkey,
+    start_time bigint sortkey,
+    user_id int,
     level varchar(4),
-    song_ig int foreign key references songs,
-    artist_id char(18) foreign key references artists,
-    session_id int sortkey,
+    song_ig int,
+    artist_id char(18),
+    session_id int,
     location varchar(100),
-    user_agent varchar(200);
+    user_agent varchar(200));
 """)
 
 user_table_create = ("""
-    create table users
+    create table users (
     user_id int primary key,
     first_name varchar(50),
     last_name varchar(50),
-    gender varchar(1) sortkey,
-    level varchar(4) sortkey;
+    gender varchar(1),
+    level varchar(4) sortkey);
 """)
 
 song_table_create = ("""
-    create table songs
+    create table songs (
     song_id int primary key,
     title varchar(50),
-    artist_id int foreign key references artists,
+    artist_id int,
     year smallint,
-    duration numeric;
+    duration numeric);
 """)
 
 artist_table_create = ("""
-    create table artists
+    create table artists (
     artist_id char(18) primary key,
     name varchar(50),
     location varchar(100),
     latitude numeric(7,4),
-    longitude numeric(7,4);
+    longitude numeric(7,4));
 """)
 
 time_table_create = ("""
-    create table time
+    create table time (
     start_time bigint primary key,
     hour smallint,
     day smallint,
     week smallint,
     month smallint,
     year smallint,
-    weekday smallint;
+    weekday smallint);
 """)
 
 # STAGING TABLES
