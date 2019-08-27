@@ -96,7 +96,7 @@ def connect_redshift(config):
     return redshift
 
 
-def cluster_status(redshift, cluster_name):
+def get_cluster_status(redshift, cluster_name):
     try:
         cluster_properties = redshift.describe_clusters(
                 ClusterIdentifier=cluster_name
@@ -142,11 +142,11 @@ def create_cluster(
     # wait for cluster to be ready
     print('Waiting for cluster to be available...', end='')
     time.sleep(3)
-    (state, properties) = cluster_status(redshift, cl_name)
-    while not state or state.lower() != 'available':
+    (status, properties) = get_cluster_status(redshift, cl_name)
+    while not status or status.lower() != 'available':
         print('.', end='')
         time.sleep(2)
-        (state, properties) = cluster_status(redshift, cl_name)
+        (status, properties) = get_cluster_status(redshift, cl_name)
     print(' Cluster available!')
     return properties
 
@@ -204,7 +204,10 @@ if __name__ == '__main__':
     # Cluster operations
     redshift = connect_redshift(config)
     cluster_name = config.get('DWH', 'DWH_CLUSTER_IDENTIFIER')
-    (cluster_status, cluster_props) = cluster_status(redshift, cluster_name)
+    (cluster_status, cluster_props) = get_cluster_status(
+            redshift,
+            cluster_name
+    )
     if cluster_status:
         print("Redshift cluster {} exists:\n\tendpoint: {}".format(
             cluster_name,
@@ -234,27 +237,24 @@ if __name__ == '__main__':
 ## #                     region_name='eu-west-3',
 ##                      region_name='us-west-2',
 ##                      aws_access_key_id = KEY,
-##                      aws_secret_access_key = SECRET,                     
 ##                     )
-## 
+##
 ## s3 = boto3.resource('s3',
 ##                     region_name='us-west-2',
 ##                     aws_access_key_id = KEY,
 ##                     aws_secret_access_key = SECRET,
 ##                    )
-## 
-
+##
 ## DWH_ENDPOINT = myClusterProps['Endpoint']['Address']
 ## DWH_ROLE_ARN = myClusterProps['IamRoles'][0]['IamRoleArn']
 ## print("DWH_ENDPOINT :: ", DWH_ENDPOINT)
 ## print("DWH_ROLE_ARN :: ", DWH_ROLE_ARN)
-
 ## try:
 ##     vpc = ec2.Vpc(id=myClusterProps['VpcId'])
 ##     #defaultSg = list(vpc.security_groups.all())[0]
 ##     defaultSg = list(vpc.security_groups.filter(GroupNames=["default"]))[0]
 ##     print(defaultSg)
-##     
+##
 ##     defaultSg.authorize_ingress(
 ##         # I don't think I need this as I'm already operating on the SG
 ##         #GroupName= 'sg-redshift-incoming',  # TODO: fill out
@@ -265,16 +265,14 @@ if __name__ == '__main__':
 ##     )
 ## except Exception as e:
 ##     print(e)
-    
-    
-##     
+##
 ## redshift.delete_cluster( ClusterIdentifier=DWH_CLUSTER_IDENTIFIER,  SkipFinalClusterSnapshot=True)
-## 
-## 
+##
+##
 ## myClusterProps = redshift.describe_clusters(ClusterIdentifier=DWH_CLUSTER_IDENTIFIER)['Clusters'][0]
 ## prettyRedshiftProps(myClusterProps)
-## 
-## 
+##
+##
 ## #### CAREFUL!!
 ## #-- Uncomment & run to delete the created resources
 ## iam.detach_role_policy(RoleName=DWH_IAM_ROLE_NAME, PolicyArn="arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess")
