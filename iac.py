@@ -8,7 +8,11 @@ import time
 
 
 def get_config(cfg_file, required=[]):
-    '''Get the configuration from cfg_file and validate it'''
+    ''' Get the configuration from cfg_file and validate it.
+    
+    Validation is done against a list of tuples (section, key) that must
+    be present in the config file.
+    '''
 
     config = configparser.ConfigParser()
     config.read_file(open(cfg_file))
@@ -28,7 +32,11 @@ def get_config(cfg_file, required=[]):
 
 
 def connect_iam(config):
-    '''Connect to AWS IAM'''
+    ''' Connect to AWS IAM.
+    
+    Given a pointer to a configparser object connect to a AWS IAM endpoint
+    and return the resource.
+    '''
     print('Connecting to AWS IAM endpoint...')
     iam = boto3.resource(
             'iam',
@@ -40,9 +48,9 @@ def connect_iam(config):
 
 
 def role_arn(iam, role_name):
-    '''Check if a role with a specific name is defined
+    ''' Check if a role with a specific name is defined.
 
-    If the role exists it's ARN is returned, else False is returned.
+    If the role exists it's ARN is returned, if not False is returned.
     '''
     for role in iam.roles.all():
         if role.name == role_name:
@@ -51,6 +59,10 @@ def role_arn(iam, role_name):
 
 
 def create_role(iam, role_name):
+    ''' Create a new IAM role and attach and S3ReadOnly policy to it.
+    
+    Returns the IAM role ARN.
+    '''
     assume_role_policy_document = json.dumps({
         "Version": "2012-10-17",
         "Statement": [
@@ -86,6 +98,7 @@ def create_role(iam, role_name):
 
 
 def connect_redshift(config):
+    ''' Connect to an AWS Redshift endpoint.'''
     print('Connecting to AWS Redshift endpoint...')
     redshift = boto3.client(
             'redshift',
@@ -97,6 +110,12 @@ def connect_redshift(config):
 
 
 def get_cluster_status(redshift, cluster_name):
+    ''' Get the status and properties of a Redshift cluster.
+
+    Given it's name and a connection to a Amazon Redshift endpoint check for
+    it's existence. If the cluster exists return a tuple with it's state and
+    and array with it's properties.
+    '''
     try:
         cluster_properties = redshift.describe_clusters(
                 ClusterIdentifier=cluster_name
@@ -118,7 +137,10 @@ def create_cluster(
         cl_ntype='dc2.large',
         cl_nnodes=4,
 ):
-    '''Create a new redshift cluster and wait until it is ready'''
+    ''' Create a new redshift cluster.
+    
+    This call blocks until the new cluster is 'available'.
+    '''
     # create the cluster
     print("Creating Redshift cluster: '{}'".format(cl_name))
     try:
@@ -152,6 +174,12 @@ def create_cluster(
 
 
 def write_user_config(infra_config, iam_role_arn, endpoint):
+    ''' Write the dwh.cfg configuration file.
+
+    Given the infrastructure configuration (configparse), an IAM role ARN
+    and a Amazon Redshift endpoint create the configuration file necessary
+    to run the create_tables and etl scripts.
+    '''
     config = configparser.ConfigParser()
     config['CLUSTER'] = {
             'HOST': endpoint,

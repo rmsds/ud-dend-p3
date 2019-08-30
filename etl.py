@@ -4,6 +4,7 @@ from sql_queries import copy_table_queries, insert_table_queries
 
 
 def load_staging_tables(cur, conn):
+    ''' Load the staging tables using COPY commands.'''
     print("Loading staging tables: {} operation(s) to execute".format(
         len(copy_table_queries)
     ))
@@ -15,6 +16,7 @@ def load_staging_tables(cur, conn):
 
 
 def insert_tables(cur, conn):
+    ''' Transform and load data from the staging to the final tables. '''
     print("Inserting into tables: {} operation(s) to execute".format(
         len(insert_table_queries)
     ))
