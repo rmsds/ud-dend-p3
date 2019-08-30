@@ -4,7 +4,7 @@ This repository contains my submission for the Cloud Data Wharehouses Project (s
 In this project a set of logs and song information are loaded into staging tables and are then transformed and loaded into five final tables to allow for easier analytics.
 
 
-# Preqrequisites to run this code
+# Prerequisites to run this code
 * spin-up a Amazon Redshift cluster
   * with an associated IAM role with _S3ReadAccess_
 * a `dwh.cfg` file with the information generated in the previous step (see `dwh.cfg.orig` for a template)
