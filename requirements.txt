@@ -1,7 +1,6 @@
 # Requirements needed on top of jupyter/base-notebook docker container
-pandas
 boto3
-ipython-sql
 configparser
+# ipython-sql
+# pandas
 psycopg2-binary
-click
