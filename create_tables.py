@@ -8,7 +8,7 @@ def drop_tables(cur, conn):
         len(drop_table_queries)
     ))
     for query in drop_table_queries:
-        print('DROPing table...', end='')
+        print('DROPing table...', end='', flush=True)
         cur.execute(query)
         conn.commit()
         print('OK!')
@@ -19,7 +19,7 @@ def create_tables(cur, conn):
         len(create_table_queries)
     ))
     for query in create_table_queries:
-        print('CREATing table...', end='')
+        print('CREATing table...', end='', flush=True)
         cur.execute(query)
         conn.commit()
         print('OK!')

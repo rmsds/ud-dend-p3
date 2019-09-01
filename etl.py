@@ -9,7 +9,7 @@ def load_staging_tables(cur, conn):
         len(copy_table_queries)
     ))
     for query in copy_table_queries:
-        print('Loading staging table...', end='')
+        print('Loading staging table...', end='', flush=True)
         cur.execute(query)
         conn.commit()
         print('OK!')
@@ -21,7 +21,7 @@ def insert_tables(cur, conn):
         len(insert_table_queries)
     ))
     for query in insert_table_queries:
-        print('Inserting into table...', end='')
+        print('Inserting into table...', end='', flush=True)
         cur.execute(query)
         conn.commit()
         print('OK!')

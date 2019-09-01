@@ -162,11 +162,11 @@ def create_cluster(
         return None
 
     # wait for cluster to be ready
-    print('Waiting for cluster to be available...', end='')
+    print('Waiting for cluster to be available...', end='', flush=True)
     time.sleep(3)
     (status, properties) = get_cluster_status(redshift, cl_name)
     while not status or status.lower() != 'available':
-        print('.', end='')
+        print('.', end='', flush=True)
         time.sleep(2)
         (status, properties) = get_cluster_status(redshift, cl_name)
     print(' Cluster available!')
