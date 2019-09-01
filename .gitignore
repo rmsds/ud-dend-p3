@@ -1,0 +1,5 @@
+*.cfg
+*.ipynb
+.ipynb_checkpoints/
+__pycache__
+log_json_path.json
