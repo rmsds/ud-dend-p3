@@ -9,7 +9,7 @@ import time
 
 def get_config(cfg_file, required=[]):
     ''' Get the configuration from cfg_file and validate it.
-    
+
     Validation is done against a list of tuples (section, key) that must
     be present in the config file.
     '''
@@ -33,7 +33,7 @@ def get_config(cfg_file, required=[]):
 
 def connect_iam(config):
     ''' Connect to AWS IAM.
-    
+
     Given a pointer to a configparser object connect to a AWS IAM endpoint
     and return the resource.
     '''
@@ -60,7 +60,7 @@ def role_arn(iam, role_name):
 
 def create_role(iam, role_name):
     ''' Create a new IAM role and attach and S3ReadOnly policy to it.
-    
+
     Returns the IAM role ARN.
     '''
     assume_role_policy_document = json.dumps({
@@ -138,7 +138,7 @@ def create_cluster(
         cl_nnodes=4,
 ):
     ''' Create a new redshift cluster.
-    
+
     This call blocks until the new cluster is 'available'.
     '''
     # create the cluster
