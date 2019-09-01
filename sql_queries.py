@@ -58,8 +58,8 @@ songplay_table_create = ("""
     start_time timestamp not null sortkey,
     user_id int not null,
     level varchar(4),
-    song_id char(18),
-    artist_id char(18),
+    song_id char(18) not null,
+    artist_id char(18) not null,
     session_id int,
     location varchar(100),
     user_agent varchar(200));
@@ -78,7 +78,7 @@ song_table_create = ("""
     create table songs (
     song_id char(18) primary key,
     title varchar(300),
-    artist_id char(18),
+    artist_id char(18) not null,
     year smallint,
     duration numeric);
 """)
