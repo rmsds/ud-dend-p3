@@ -55,8 +55,8 @@ staging_songs_table_create = ("""
 songplay_table_create = ("""
     create table songplay (
     songplay_id int identity(0,1) primary key,
-    start_time timestamp sortkey,
-    user_id int,
+    start_time timestamp not null sortkey,
+    user_id int not null,
     level varchar(4),
     song_id char(18),
     artist_id char(18),
@@ -150,7 +150,8 @@ songplay_table_insert = ("""
     from staging_events as se
     inner join staging_songs as ss
         on se.artist_name = ss.artist_name
-        and se.song = ss.title;
+        and se.song = ss.title
+    where se.page = 'NextSong';
 """)
 
 user_table_insert = ("""
@@ -168,7 +169,8 @@ user_table_insert = ("""
         se.gender,
         se.level
     from staging_events as se
-    where se.userId is not null;
+    where se.userId is not null
+        and se.page = 'NextSong';
 """)
 
 song_table_insert = ("""
@@ -223,8 +225,8 @@ time_table_insert = ("""
         extract(month   from se.ts),
         extract(year    from se.ts),
         extract(weekday from se.ts)
-    from staging_events as se;
-
+    from staging_events as se
+    where se.page = 'NextSong';
 """)
 
 # QUERY LISTS
