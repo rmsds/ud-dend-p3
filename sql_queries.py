@@ -198,7 +198,7 @@ artist_table_insert = ("""
         latitude,
         longitude
     )
-    select
+    select distinct
         sg.artist_id,
         sg.artist_name,
         sg.artist_location,
@@ -218,15 +218,14 @@ time_table_insert = ("""
         weekday
     )
     select
-        se.ts,
-        extract(hour    from se.ts),
-        extract(day     from se.ts),
-        extract(week    from se.ts),
-        extract(month   from se.ts),
-        extract(year    from se.ts),
-        extract(weekday from se.ts)
-    from staging_events as se
-    where se.page = 'NextSong';
+        sp.start_time,
+        extract(hour    from sp.start_time),
+        extract(day     from sp.start_time),
+        extract(week    from sp.start_time),
+        extract(month   from sp.start_time),
+        extract(year    from sp.start_time),
+        extract(weekday from sp.start_time)
+    from songplay as sp;
 """)
 
 # QUERY LISTS
